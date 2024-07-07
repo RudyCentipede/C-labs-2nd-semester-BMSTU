@@ -1,0 +1,1 @@
+Error. Numbers of lines and columns in square matrix must be equal.

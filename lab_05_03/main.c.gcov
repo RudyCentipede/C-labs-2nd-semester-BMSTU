@@ -1,0 +1,104 @@
+        -:    0:Source:main.c
+        -:    0:Graph:main.gcno
+        -:    0:Data:main.gcda
+        -:    0:Runs:20
+        -:    1:/*
+        -:    2:  Выбранный целочисленный тип: int
+        -:    3:  Алгоритм сортировки: сортировка пузырьком
+        -:    4:  Направление упорядочивания: по возрастанию
+        -:    5:*/
+        -:    6:#include "file.h"
+        -:    7:#include <string.h>
+        -:    8:
+        -:    9:#define OK 0
+        -:   10:#define ARGS_ERR 1
+        -:   11:#define FILEPATH_ERR 2
+        -:   12:#define FILE_WORK_ERR 3
+        -:   13:
+       20:   14:int main(int argc, char **argv)
+        -:   15:{
+       20:   16:    if (argc == 4 && strcmp(argv[1], "c") == 0)
+    #####:   17:    {
+    #####:   18:        FILE *f = fopen(argv[3], "wb");
+    #####:   19:        fill_bin_rand_nums(f, atoi(argv[2]));
+    #####:   20:        fclose(f);
+        -:   21:    }
+       20:   22:    else if (argc == 3 && strcmp(argv[1], "p") == 0)
+        3:   23:    {
+        4:   24:        FILE *f = fopen(argv[2], "rb");
+        4:   25:        if (f == NULL)
+    #####:   26:            return FILEPATH_ERR;
+        -:   27:
+        -:   28:
+        4:   29:        if (print_bin_nums(f) <= 0)
+        -:   30:        {
+        1:   31:            fclose(f);
+        1:   32:            return FILE_WORK_ERR;
+        -:   33:        }
+        3:   34:        fclose(f);
+        -:   35:    }
+       16:   36:    else if (argc == 3 && strcmp(argv[1], "s") == 0)
+        2:   37:    {
+        4:   38:        FILE *f = fopen(argv[2], "rb+");
+        4:   39:        if (f == NULL)
+    #####:   40:            return FILEPATH_ERR;
+        -:   41:
+        -:   42:
+        4:   43:        if (sort(f) <= 0)
+        -:   44:        {
+        2:   45:            fclose(f);
+        2:   46:            return FILE_WORK_ERR;
+        -:   47:        }
+        2:   48:        fclose(f);
+        -:   49:    }
+       12:   50:    else if (argc == 4 && strcmp(argv[1], "import") == 0)
+        9:   51:    {
+        9:   52:        FILE *src = fopen(argv[2], "r");
+        -:   53:
+        9:   54:        if (src == NULL)
+    #####:   55:            return FILEPATH_ERR;
+        -:   56:
+        -:   57:
+        9:   58:        FILE *dst = fopen(argv[3], "wb");
+        -:   59:
+        9:   60:        if (dst == NULL)
+        -:   61:        {
+    #####:   62:            fclose(src);
+    #####:   63:            return FILEPATH_ERR;
+        -:   64:        }
+        -:   65:
+        9:   66:        txt_to_bin(src, dst);
+        9:   67:        fclose(src);
+        9:   68:        fclose(dst);
+        -:   69:    }
+        3:   70:    else if (argc == 4 && strcmp(argv[1], "export") == 0)
+        2:   71:    {
+        2:   72:        FILE *src = fopen(argv[2], "rb");
+        -:   73:
+        2:   74:        if (src == NULL)
+    #####:   75:            return FILEPATH_ERR;
+        -:   76:
+        -:   77:
+        2:   78:        FILE *dst = fopen(argv[3], "w");
+        -:   79:
+        2:   80:        if (dst == NULL)
+        -:   81:        {
+    #####:   82:            fclose(src);
+    #####:   83:            return FILEPATH_ERR;
+        -:   84:        }
+        -:   85:
+        2:   86:        if (bin_to_txt(src, dst) <= 0)
+        -:   87:        {
+    #####:   88:            fclose(src);
+    #####:   89:            fclose(dst);
+    #####:   90:            return FILE_WORK_ERR;
+        -:   91:        }
+        -:   92:
+        2:   93:        fclose(src);
+        2:   94:        fclose(dst);
+        -:   95:    }
+        -:   96:    else
+        1:   97:        return ARGS_ERR;
+        -:   98:
+       16:   99:    return OK;
+        -:  100:}

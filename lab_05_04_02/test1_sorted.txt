@@ -1,0 +1,16 @@
+potato
+cat
+200
+4
+chicken
+fly
+150
+3
+tomato
+dog
+100
+2
+ball
+mouse
+20
+1

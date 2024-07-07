@@ -1,0 +1,124 @@
+        -:    0:Source:main.c
+        -:    0:Graph:main.gcno
+        -:    0:Data:main.gcda
+        -:    0:Runs:63
+        -:    1:#include "product.h"
+        -:    2:#include <string.h>
+        -:    3:
+        -:    4:#define OK 0
+        -:    5:#define FILEPATH_ERR 1
+        -:    6:#define COPY_ERR 2
+        -:    7:#define SORT_ERR 3
+        -:    8:#define FIND_ERR 4
+        -:    9:#define SCAN_ERR 5
+        -:   10:#define INSERT_ERR 6
+        -:   11:#define IMPORT_ERR 7
+        -:   12:#define EXPORT_ERR 8
+        -:   13:#define WRONG_ARGS 53
+        -:   14:
+       63:   15:int main(int argc, char **argv)
+        -:   16:{
+       63:   17:    setbuf(stdout, NULL);
+        -:   18:
+       63:   19:    if (argc == 4 && strcmp(argv[1], "sb") == 0)
+        7:   20:    {
+        7:   21:        FILE *fsrc = fopen(argv[2], "rb");
+        7:   22:        if (fsrc == NULL)
+    #####:   23:            return FILEPATH_ERR;
+        7:   24:        FILE *fdst = fopen(argv[3], "wb+");
+        7:   25:        if (fdst == NULL)
+        -:   26:        {
+    #####:   27:            fclose(fsrc);
+    #####:   28:            return FILEPATH_ERR;
+        -:   29:        }
+        7:   30:        if (copy(fsrc, fdst))
+        -:   31:        {
+    #####:   32:            fclose(fsrc);
+    #####:   33:            fclose(fdst);
+    #####:   34:            return COPY_ERR;
+        -:   35:        }
+        7:   36:        if (sort_products(fdst))
+        -:   37:        {
+    #####:   38:            fclose(fsrc);
+    #####:   39:            fclose(fdst);
+    #####:   40:            return SORT_ERR;
+        -:   41:        }
+        7:   42:        fclose(fsrc);
+        7:   43:        fclose(fdst);
+        -:   44:    }
+       56:   45:    else if (argc == 4 && strcmp(argv[1], "fb") == 0)
+        4:   46:    {
+        8:   47:        FILE *f = fopen(argv[2], "rb");
+        8:   48:        if (f == NULL)
+        2:   49:            return FILEPATH_ERR;
+        6:   50:        if (print_prods_end_substr(f, argv[3]))
+        -:   51:        {
+        2:   52:            fclose(f);
+        2:   53:            return FIND_ERR;
+        -:   54:        }
+        4:   55:        fclose(f);
+        -:   56:    }
+       48:   57:    else if (argc == 3 && strcmp(argv[1], "ab") == 0)
+        8:   58:    {
+        8:   59:        product_t product = { 0 };
+        8:   60:        if (fscan_product(stdin, &product))
+    #####:   61:            return SCAN_ERR;
+        8:   62:        FILE *f = fopen(argv[2], "rb+");
+        8:   63:        if (f == NULL)
+        -:   64:        {
+    #####:   65:            f = fopen(argv[2], "wb+");
+    #####:   66:            if (f == NULL)
+    #####:   67:                return FILEPATH_ERR;
+        -:   68:        }
+        8:   69:        if (add_product(f, &product))
+        -:   70:        {
+    #####:   71:            fclose(f);
+    #####:   72:            return INSERT_ERR;
+        -:   73:        }
+        8:   74:        fclose(f);
+        -:   75:    }
+       40:   76:    else if (argc == 4 && strcmp(argv[1], "import") == 0)
+       24:   77:    {
+       24:   78:        FILE *fsrc = fopen(argv[2], "r");
+       24:   79:        if (fsrc == NULL)
+    #####:   80:            return FILEPATH_ERR;
+       24:   81:        FILE *fdst = fopen(argv[3], "wb");
+       24:   82:        if (fdst == NULL)
+        -:   83:        {
+    #####:   84:            fclose(fsrc);
+    #####:   85:            return FILEPATH_ERR;
+        -:   86:        }
+       24:   87:        if (txt_to_bin(fsrc, fdst))
+        -:   88:        {
+    #####:   89:            fclose(fsrc);
+    #####:   90:            fclose(fdst);
+    #####:   91:            return IMPORT_ERR;
+        -:   92:        }
+       24:   93:        fclose(fsrc);
+       24:   94:        fclose(fdst);
+        -:   95:    }
+       16:   96:    else if (argc == 4 && strcmp(argv[1], "export") == 0)
+       15:   97:    {
+       15:   98:        FILE *fsrc = fopen(argv[2], "rb");
+       15:   99:        if (fsrc == NULL)
+    #####:  100:            return FILEPATH_ERR;
+       15:  101:        FILE *fdst = fopen(argv[3], "w");
+       15:  102:        if (fdst == NULL)
+        -:  103:        {
+    #####:  104:            fclose(fsrc);
+    #####:  105:            return FILEPATH_ERR;
+        -:  106:        }
+       15:  107:        if (bin_to_txt(fsrc, fdst))
+        -:  108:        {
+    #####:  109:            fclose(fsrc);
+    #####:  110:            fclose(fdst);
+    #####:  111:            return EXPORT_ERR;
+        -:  112:        }
+       15:  113:        fclose(fsrc);
+       15:  114:        fclose(fdst);
+        -:  115:    }
+        -:  116:    else
+        1:  117:        return WRONG_ARGS;
+        -:  118:
+       58:  119:    return OK;
+        -:  120:}

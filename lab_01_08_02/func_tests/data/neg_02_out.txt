@@ -1,0 +1,1 @@
+Error: number of shifts has to be a positive number.

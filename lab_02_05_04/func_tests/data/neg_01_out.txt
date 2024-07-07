@@ -1,0 +1,1 @@
+Incorrect input. Number has to be positive and less than maximum.

@@ -1,0 +1,53 @@
+        -:    0:Source:main.c
+        -:    0:Graph:main.gcno
+        -:    0:Data:-
+        -:    0:Runs:0
+        -:    1:#include <stdio.h>
+        -:    2:#include "file.h"
+        -:    3:
+        -:    4:#define OK 0
+        -:    5:#define ARGS_ERR 1
+        -:    6:#define FILEPATH_ERR 2
+        -:    7:#define EMPTY_FILE_ERR 3
+        -:    8:#define NO_NUMS_BETWEEN_ERR 4
+        -:    9:
+    #####:   10:int main(int argc, char **argv)
+        -:   11:{
+    #####:   12:    if (argc != 2)
+        -:   13:    {
+    #####:   14:        printf("Error. There must be one argument.");
+    #####:   15:        return ARGS_ERR;
+        -:   16:    }
+        -:   17:
+        -:   18:    FILE *f;
+        -:   19:    double min, max, avg;
+        -:   20:
+    #####:   21:    f = fopen(argv[1], "r");
+    #####:   22:    if (f == NULL)
+        -:   23:    {
+    #####:   24:        printf("Error. There is no such file.");
+    #####:   25:        return FILEPATH_ERR;
+        -:   26:    }
+        -:   27:
+    #####:   28:    if (file_min(f, &min) != 0)
+        -:   29:    {
+    #####:   30:        printf("Error. No data in the file.");
+    #####:   31:        return EMPTY_FILE_ERR;
+        -:   32:    }
+        -:   33:
+    #####:   34:    rewind(f);
+        -:   35:
+    #####:   36:    file_max(f, &max);
+        -:   37:
+    #####:   38:    rewind(f);
+        -:   39:
+    #####:   40:    if (file_average_between(f, min, max, &avg) != 0)
+        -:   41:    {
+    #####:   42:        printf("Error. There is no numbers between minimum and maximum.");
+    #####:   43:        return NO_NUMS_BETWEEN_ERR;
+        -:   44:    }
+        -:   45:
+    #####:   46:    fclose(f);
+    #####:   47:    printf("%.6lf", avg);
+    #####:   48:    return OK;
+        -:   49:}

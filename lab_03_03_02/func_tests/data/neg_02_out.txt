@@ -1,0 +1,1 @@
+Input error. Number of lines in matrix has to be positive and less than maximum.
